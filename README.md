@@ -11,3 +11,8 @@
 - Run file game_visualization.py to generate a video file of snake playthrough
 - Line 21 to change which model to visualize (choose iteration from models/v17.1)
 - Mp4 file saved in images/
+
+
+
+## Game visualization of best performing agent trained with DQL
+<img  width="600"  height="600"  src="https://github.com/Triksheim/NN-GA02-Snake-Deep-RL/blob/main/images/game_visual_v17.1_410000_no_ob_1.gif"  alt="model v17.1 agent"  >
