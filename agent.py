@@ -334,10 +334,8 @@ class DeepQLearningAgent(Agent):
 
 
     def save_model(self, file_path='', iteration=None):
-        """Save the current models to disk using tensorflow's
-        inbuilt save model function (saves in h5 format)
-        saving weights instead of model as cannot load compiled
-        model with any kind of custom object (loss or metric)
+        """Save the current models to disk using PyTorch
+        inbuilt save model function (saves in pth format)
         
         Parameters
         ----------
@@ -357,8 +355,8 @@ class DeepQLearningAgent(Agent):
         
     def load_model(self, file_path='', iteration=None):
         """ load any existing models, if available """
-        """Load models from disk using tensorflow's
-        inbuilt load model function (model saved in h5 format)
+        """Load models from disk using pytorch's
+        inbuilt load model function (model saved in pth format)
         
         Parameters
         ----------
@@ -397,7 +395,7 @@ class DeepQLearningAgent(Agent):
         summary(self._model, (2, 10, 10))
 
 
-    def train_agent(self, batch_size=32, num_games=1, reward_clip=False):
+    def train_agent(self, batch_size=64, num_games=1, reward_clip=False):
         """
         Trains the agent using samples from the replay buffer.
 
@@ -420,22 +418,25 @@ class DeepQLearningAgent(Agent):
         self._model.train()
 
         # Use the target network for prediction if enabled, else use main model.
-        current_model = self._target_net if self._use_target_net else self._model
+        target_model = self._target_net if self._use_target_net else self._model
 
         # Compute Q values for the next states without gradient computation.
         with torch.no_grad():  
-            next_model_outputs = self._get_model_outputs(next_s, current_model).to(self.device)
+            next_model_outputs = self._get_model_outputs(next_s, target_model)
         
         # Compute the discounted reward; using a mask for invalid moves
         inf_tensor = torch.tensor(-np.inf).to(next_model_outputs.device)
         discounted_reward = r + self._gamma * torch.max(torch.where(legal_moves == 1, next_model_outputs, inf_tensor), dim=1).values.reshape(-1, 1) * (1 - done)
 
         # Calculate the target Q-values
-        target = self._get_model_outputs(s)
+        target = self._get_model_outputs(s, target_model)
         target = (1 - a) * target + a * discounted_reward
 
+        # Calculate predicted Q-values
+        prediction = self._get_model_outputs(s)
+
         # Compute loss between predicted Q-values and target Q-values
-        loss = self._loss_function(target, self._model(self._prepare_input(s)))
+        loss = self._loss_function(prediction, target)
 
         # Backpropagation: compute gradients and update model parameters
         self._optimizer.zero_grad() # Reset gradients to zero

@@ -15,8 +15,8 @@ from agent import DeepQLearningAgent
 
 # model config version
 version = 'v17.1'
-pre_trained_model = False        # set to True to load a existing model
-trained_model_iteration = 50000 # iteration to load
+pre_trained_model = False    # set to True to load a existing model
+trained_model_iteration = 434000 # iteration to load
 
 # get training configurations
 with open('model_config/{:s}.json'.format(version), 'r') as f:
@@ -37,7 +37,7 @@ games_eval = 8
 # setup the agent
 agent = DeepQLearningAgent(board_size=board_size, frames=frames, n_actions=n_actions, 
                            buffer_size=buffer_size, version=version)
-#agent.print_models()
+agent.print_models()
 
 # check in the same order as class hierarchy
 if(isinstance(agent, DeepQLearningAgent)):

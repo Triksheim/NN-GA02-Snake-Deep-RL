@@ -171,7 +171,7 @@ class Snake:
         self._n_actions = 4
         self._board_size = board_size
         self._n_frames = frames
-        self._rewards = {'out':-1, 'food':1, 'time':0, 'no_food':0}
+        self._rewards = {'out':-1, 'food':10, 'time':0, 'no_food':0}
         # start length is constrained to be less than half of board size
         # self._start_length = min(start_length, (board_size-2)//2)
         self._start_length = 2
@@ -1391,6 +1391,9 @@ class SnakeNumpy:
             the reward value, can be static or dependent on snake length
         """
         # return((self._snake_length[f] - self._start_length + 1) * self._rewards['food'])
+
+        #return self._rewards['food'] * (((64) - self._snake_length[f]))
+
         return self._rewards['food']
 
     def _get_death_reward(self, f):
@@ -1407,7 +1410,8 @@ class SnakeNumpy:
         reward : int (float if allowed in init function)
             the reward value, can be static or dependent on snake length
         """
-        # return (self._snake_length[f] - self._start_length+1)*self._rewards['out']
+        #return (self._snake_length[f] - self._start_length+1) * self._rewards['out']
+    
         return self._rewards['out']
 
     def _check_if_done(self, action):
