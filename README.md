@@ -1,6 +1,6 @@
 # Running Graded Assignment 2
 ## 1. Training
-**To avoid NaN value error at beginning of training load the supplied buffer that is generated from BST
+**To avoid NaN value error at beginning of training load the supplied buffer that is generated from BFS
 or generate a new buffer using supervised_learning.py.**
 
 **models/17.1/buffer_0001 automatically gets loaded if it exists.**
