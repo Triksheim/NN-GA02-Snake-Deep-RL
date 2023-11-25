@@ -21,6 +21,10 @@ or generate a new buffer using supervised_learning.py.**
 
 # Results
 I have saved the best test results, model weights and visualizations in folder /best_results/
+- Best iteration: *1500k model_434000.pth*
+- Best iternation length reward structure: *1500k length_rewards model_1424000.pth*
+  -  To use length reward structure, line 1395 & 1413 must be uncommented in game_environment.py
+
 
 ## Game visualization of best performing agent trained with DQN
 
